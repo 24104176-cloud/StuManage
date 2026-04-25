@@ -1,7 +1,5 @@
-// Change this URL to your actual Render URL after deploying the backend
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000/api'
-    : 'https://stumanage-backend.onrender.com/api'; // <--- REPLACE THIS WITH YOUR RENDER URL
+// This will automatically use the current domain for API calls
+const API_URL = window.location.origin + '/api';
 let token = localStorage.getItem('token');
 
 // Utility: Fetch with Auth

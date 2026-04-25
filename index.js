@@ -7,16 +7,20 @@ const apiRoutes = require('./routes/api');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for all origins (Required for cross-platform deployment)
-app.use(cors({ origin: "*" }));
+app.use(cors());
 app.use(express.json());
 
-// API Routes
+// Serve static files from the frontend directory
+// When deployed on Railway with root as 'backend', frontend is at '../frontend'
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 app.use('/api', apiRoutes);
 
-// Health check
-app.get('/health', (req, res) => res.status(200).json({ status: 'OK' }));
+// Route to serve the frontend index.html for any non-API route
+app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StuManage - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section" class="auth-container">
+        <div class="login-box">
+            <h2><i class="fas fa-user-shield"></i> StuManage Admin</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="username" required placeholder="Enter username">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Section (Hidden by default) -->
+    <div id="main-section" class="main-container" style="display: none;">
+        <nav class="sidebar">
+            <div class="logo">StuManage</div>
+            <ul>
+                <li class="nav-item active" data-target="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                <li class="nav-item" data-target="students"><i class="fas fa-user-graduate"></i> Students</li>
+                <li class="nav-item" data-target="courses"><i class="fas fa-book"></i> Courses</li>
+                <li class="nav-item" data-target="attendance"><i class="fas fa-calendar-check"></i> Attendance</li>
+                <li class="nav-item" data-target="grades"><i class="fas fa-poll-h"></i> Grades & Results</li>
+                <li class="nav-item" data-target="fees"><i class="fas fa-money-bill-wave"></i> Fees</li>
+                <li class="nav-item" data-target="notifications"><i class="fas fa-bell"></i> Notifications</li>
+                <li id="logout-btn" class="nav-item logout"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <header>
+                <h2 id="page-title">Dashboard</h2>
+            </header>
+
+            <div id="content-area">
+                <!-- Dashboard Home -->
+                <div id="dashboard-view" class="view active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <div class="stat-info">
+                                <h3>Total Students</h3>
+                                <p id="stat-students">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-book-open"></i>
+                            <div class="stat-info">
+                                <h3>Total Courses</h3>
+                                <p id="stat-courses">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="stat-info">
+                                <h3>Attendance Rec.</h3>
+                                <p id="stat-attendance">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-indian-rupee-sign"></i>
+                            <div class="stat-info">
+                                <h3>Fees Collected</h3>
+                                <p id="stat-fees">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Management -->
+                <div id="students-view" class="view">
+                    <div class="action-bar">
+                        <button class="btn-success" id="open-student-modal">Add Student</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Branch</th>
+                                    <th>Year</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Course Management -->
+                <div id="courses-view" class="view">
+                    <div class="action-bar">
+                        <button class="btn-success" id="open-course-modal">Add Course</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Code</th>
+                                    <th>Credits</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="course-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Attendance -->
+                <div id="attendance-view" class="view">
+                    <div class="form-container">
+                        <h3>Mark Attendance</h3>
+                        <form id="attendance-form">
+                            <select id="attn-student-select" required></select>
+                            <select id="attn-course-select" required></select>
+                            <input type="date" id="attn-date" required>
+                            <select id="attn-status" required>
+                                <option value="Present">Present</option>
+                                <option value="Absent">Absent</option>
+                            </select>
+                            <button type="submit" class="btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Grades -->
+                <div id="grades-view" class="view">
+                     <div class="form-container">
+                        <h3>Add Marks</h3>
+                        <form id="marks-form">
+                            <select id="marks-student-select" required></select>
+                            <select id="marks-course-select" required></select>
+                            <input type="number" id="marks-input" placeholder="Enter Marks" required min="0" max="100">
+                            <button type="submit" class="btn-primary">Save Marks</button>
+                        </form>
+                    </div>
+                    <div class="table-container">
+                        <h3>Results Summary</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Total Marks</th>
+                                    <th>Percentage</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Fees -->
+                <div id="fees-view" class="view">
+                    <div class="form-container">
+                        <h3>Add Payment</h3>
+                        <form id="fees-form">
+                            <select id="fee-student-select" required></select>
+                            <input type="number" id="fee-amount" placeholder="Amount" required>
+                            <input type="date" id="fee-date" required>
+                            <select id="fee-status" required>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                            <button type="submit" class="btn-primary">Add Record</button>
+                        </form>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fees-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div id="notifications-view" class="view">
+                    <div class="form-container">
+                        <h3>Post Notification</h3>
+                        <form id="notification-form">
+                            <input type="text" id="notif-title" placeholder="Title" required>
+                            <textarea id="notif-message" placeholder="Message" required></textarea>
+                            <button type="submit" class="btn-primary">Post</button>
+                        </form>
+                    </div>
+                    <div id="notifications-list" class="notif-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="student-modal-title">Add Student</h3>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                <input type="text" id="student-name" placeholder="Name" required>
+                <input type="email" id="student-email" placeholder="Email" required>
+                <input type="text" id="student-branch" placeholder="Branch" required>
+                <input type="number" id="student-year" placeholder="Year" required>
+                <div class="modal-btns">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary closeModal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="course-modal" class="modal">
+        <div class="modal-content">
+            <h3>Add Course</h3>
+            <form id="course-form">
+                <input type="text" id="course-name" placeholder="Course Name" required>
+                <input type="text" id="course-code" placeholder="Course Code" required>
+                <input type="number" id="course-credits" placeholder="Credits" required>
+                <div class="modal-btns">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary closeModal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
